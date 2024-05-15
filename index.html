@@ -13,18 +13,18 @@
             <label value="columna">
                 Gráfico de Columnas
             </label>
-        
 
         <div class="datos" id="datos">
-            <div class="dato">
-                
+            <div class="punto">
+                <input type="text" class="valorX" placeholder="Valor X 1">
+                <input type="text" class="valorY" placeholder="Valor Y 1">
             </div>
         </div>
-        <button onclick="agregarPunto()" class="agregar"> + </button>
+
         <button onclick="cargarGrafico()" class="crear-grafico">Crear Gráfico</button>
     </div>
     <div class="right">
-        <div id="chart_div"></div>
+        <div id="chart_div" class="grafico"></div>
     </div>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="script.js"></script>

@@ -1,41 +1,3 @@
-//Variable que guarda la cantidad de puntos a insertar en el gráfico
-let cantidadPuntos;
-//Este arreglo guardara los pares de elementos que se insertaran en el grafico:
-//Se guardara en formato de arreglo. Ejemplo: 
-//[['leyenda 1', 600],['leyenda 2', 200]]
-var arregloDatos = [];
-
-//Funciòn que agregar un punto más
-function agregarPunto() {
-    //tomo la cantidad de puntos actual
-    cantidadPuntos = document.getElementsByClassName("punto").length;
-    //Le sumo 1
-    cantidadPuntos++;
-
-    //Creo un nuevo elemento div, que contendra los datos nuevos
-    const punto = document.createElement("div");
-    punto.className = "punto";
-
-    //Creo el input para el valor X y le asigno sus propiedades y clases
-    const inputX = document.createElement("input");
-    inputX.type = "text";
-    inputX.className = "valorX";
-    inputX.placeholder = "Valor X " + cantidadPuntos;
-    //Agrego el input al div punto
-    punto.appendChild(inputX);
-    
-    //Creo el input para el valor Y y le asigno sus propiedades y clases
-    const inputY = document.createElement("input");
-    inputY.type = "text";
-    inputY.className = "valorY";
-    inputY.placeholder = "Valor Y " + cantidadPuntos;
-    //Agrego el input al div punto
-    punto.appendChild(inputY);
-
-    //Agrego el punto al div datos
-    document.getElementById("datos").appendChild(punto);
-}
-
 //Función que cargar el gráfico de Google
 function cargarGrafico() {
     // Cargo el gráfico de Google
@@ -47,24 +9,65 @@ function cargarGrafico() {
 
 // Dibujo el gráfico y coloco los valores
 function drawChart() {
-    arregloDatos = [];
-    //Recupero los inputs que hay dentro del div datos
+
     var puntos = document.getElementById("datos").getElementsByClassName("punto");
 
-    //Controlo que todos los input tengan un valor cargado
-    for (var i = 0; i < puntos.length; i++) {
-        var valorX = puntos[i].getElementsByClassName("valorX")[0].value;
-        var valorY = puntos[i].getElementsByClassName("valorY")[0].value;
-        
-        // Verifico que ambos valores estén presentes
-        if (valorX === "" || valorY === "") {
-            alert("Cargue todos los campos");
-            return;
-        }
-        
-        // Agrego el punto al arreglo de datos
-        arregloDatos.push([parseFloat(valorX), parseFloat(valorY)]);
-    }
+    var valorX = puntos[0].getElementsByClassName("valorX")[0].value;
+    var valorY = puntos[0].getElementsByClassName("valorY")[0].value;
+
+    console.log(valorX, valorY);
+    
+    // Creo el arreglo de datos
+    const datosPlanoCartesiano = new Map([
+        [1, {x: 8, y: 17, sector: "A"}],
+        [2, {x: 23, y: 40, sector: "A"}],
+        [3, {x: 4, y: 9, sector: "A"}],
+        [4, {x: 12, y: 32, sector: "A"}],
+        [5, {x: 19, y: 22, sector: "A"}],
+        [6, {x: 3, y: 37, sector: "A"}],
+        [7, {x: 15, y: 13, sector: "A"}],
+        [8, {x: 11, y: 28, sector: "A"}],
+        [9, {x: 23, y: 5, sector: "A"}],
+        [10, {x: 1, y: 45, sector: "A"}],
+        [11, {x: 18, y: 2, sector: "A"}],
+        [12, {x: 9, y: 26, sector: "A"}],
+        [13, {x: 6, y: 43, sector: "A"}],
+        [14, {x: 22, y: 18, sector: "A"}],
+        [15, {x: 13, y: 31, sector: "A"}],
+        [16, {x: 32, y: 25, sector: "B"}],
+        [17, {x: 37, y: 49, sector: "B"}],
+        [18, {x: 46, y: 11, sector: "B"}],
+        [19, {x: 50, y: 36, sector: "B"}],
+        [20, {x: 39, y: 7, sector: "B"}],
+        [21, {x: 45, y: 20, sector: "B"}],
+        [22, {x: 34, y: 41, sector: "B"}],
+        [23, {x: 36, y: 15, sector: "B"}],
+        [24, {x: 43, y: 28, sector: "B"}],
+        [25, {x: 47, y: 9, sector: "B"}],
+        [26, {x: 38, y: 34, sector: "B"}],
+        [27, {x: 42, y: 2, sector: "B"}],
+        [28, {x: 40, y: 48, sector: "B"}],
+        [29, {x: 44, y: 19, sector: "B"}],
+        [30, {x: 35, y: 23, sector: "B"}]
+    ]);
+    
+    // Obtener el último índice en el mapa
+    const ultimoIndice = datosPlanoCartesiano.size + 1;
+
+    // Crear el nuevo objeto con los valores de valorX y valorY
+    const nuevoDato = { x: parseFloat(valorX), y: parseFloat(valorY), sector: "" };
+
+    // Agregar el nuevo elemento al mapa usando el último índice como clave
+    datosPlanoCartesiano.set(ultimoIndice, nuevoDato);
+    
+    console.log(datosPlanoCartesiano);
+
+    var arregloDatos = [];
+
+    // Agrego los puntos del nuevoMapa al arreglo de datos
+    datosPlanoCartesiano.forEach((value, key) => {
+        arregloDatos.push([value.x, value.y]);
+    });
 
     //Genero la tabla que contiene los datos con el arreglo de datos
     var data = new google.visualization.DataTable();
@@ -72,13 +75,27 @@ function drawChart() {
     data.addColumn('number', 'Y');
     data.addRows(arregloDatos);
 
-    // Opcional; Agrego el título del gráfico
     var options = {
-        'width': 600,
-        'height': 400
+        'width': "100%",
+        'height': "700"
     };
 
     // Muestro el gráfico dentro del elemento <div> con id="chart_div"
     var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
     chart.draw(data, options);
+
+    var arrayDistancia = [];
+
+    datosPlanoCartesiano.forEach((value, key) => {
+
+        var distancia = Math.sqrt((valorX-value.x)**2+(valorY-value.y)**2);
+
+        arrayDistancia.push([distancia, value.sector]);
+
+    });
+
+    arrayDistancia.sort((a, b) => a[0] - b[0]);
+
+    console.log(arrayDistancia);
+
 }
