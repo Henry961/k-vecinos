@@ -1,21 +1,28 @@
 //Función que cargar el gráfico de Google
 function cargarGrafico() {
-    // Cargo el gráfico de Google
-    google.charts.load('current', {
-        'packages': ['corechart']
-    });
-    google.charts.setOnLoadCallback(drawChart);
-}
-
-// Dibujo el gráfico y coloco los valores
-function drawChart() {
 
     var puntos = document.getElementById("datos").getElementsByClassName("punto");
 
     var valorX = puntos[0].getElementsByClassName("valorX")[0].value;
     var valorY = puntos[0].getElementsByClassName("valorY")[0].value;
 
-    console.log(valorX, valorY);
+    if(valorX == "" || valorY == ""){
+        //Validacion de datos ingresados
+        alert("Ingrese los datos");
+    }else{
+        // Cargo el gráfico de Google
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawChart(valorX, valorY));
+    }
+    
+}
+
+// Dibujo el gráfico y coloco los valores
+function drawChart(valorX, valorY) {
+    
+    var contadorA=0, contadorB=0;
     
     // Creo el arreglo de datos
     const datosPlanoCartesiano = new Map([
@@ -59,8 +66,6 @@ function drawChart() {
 
     // Agregar el nuevo elemento al mapa usando el último índice como clave
     datosPlanoCartesiano.set(ultimoIndice, nuevoDato);
-    
-    console.log(datosPlanoCartesiano);
 
     var arregloDatos = [];
 
@@ -69,7 +74,7 @@ function drawChart() {
         arregloDatos.push([value.x, value.y]);
     });
 
-    //Genero la tabla que contiene los datos con el arreglo de datos
+    // Genero la tabla que contiene los datos con el arreglo de datos
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'X');
     data.addColumn('number', 'Y');
@@ -96,6 +101,30 @@ function drawChart() {
 
     arrayDistancia.sort((a, b) => a[0] - b[0]);
 
-    console.log(arrayDistancia);
+    for(i=0;i<13;i++){
+        if(arrayDistancia[i][1] == "A"){
+            contadorA++;
+        }else{
+            contadorB++;
+        }
+    }
+
+    // Obtener el elemento con id "texto"
+    var textoElement = document.getElementById("respuesta");
+
+    if(contadorA > contadorB){
+        // Modificar el contenido del elemento
+        respuestaSector = "A";
+        textoElement.innerHTML = "Pertenece al sector A, teniendo " + contadorA + " en A y " + contadorB + " en B";
+        
+    }else{
+        // Modificar el contenido del elemento
+        respuestaSector = "B";
+        textoElement.innerHTML = "Pertenece al sector B, teniendo " + contadorB + " en B y " + contadorA + " en A";
+    }
+
+    return respuestaSector;
 
 }
+
+module.exports = drawChart;
