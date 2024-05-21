@@ -75,10 +75,10 @@ function drawChart(valorX, valorY) {
     });
 
     // Genero la tabla que contiene los datos con el arreglo de datos
-    var data = new google.visualization.DataTable();
-    data.addColumn('number', 'X');
-    data.addColumn('number', 'Y');
-    data.addRows(arregloDatos);
+    // var data = new google.visualization.DataTable();
+    // data.addColumn('number', 'X');
+    // data.addColumn('number', 'Y');
+    // data.addRows(arregloDatos);
 
     var options = {
         'width': "100%",
@@ -86,8 +86,8 @@ function drawChart(valorX, valorY) {
     };
 
     // Muestro el gráfico dentro del elemento <div> con id="chart_div"
-    var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
+    // var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+    // chart.draw(data, options);
 
     var arrayDistancia = [];
 
@@ -110,17 +110,17 @@ function drawChart(valorX, valorY) {
     }
 
     // Obtener el elemento con id "texto"
-    var textoElement = document.getElementById("respuesta");
+    // var textoElement = document.getElementById("respuesta");
 
     if(contadorA > contadorB){
         // Modificar el contenido del elemento
         respuestaSector = "A";
-        textoElement.innerHTML = "Pertenece al sector A, teniendo " + contadorA + " en A y " + contadorB + " en B";
+        // textoElement.innerHTML = "Pertenece al sector A, teniendo " + contadorA + " en A y " + contadorB + " en B";
         
     }else{
         // Modificar el contenido del elemento
         respuestaSector = "B";
-        textoElement.innerHTML = "Pertenece al sector B, teniendo " + contadorB + " en B y " + contadorA + " en A";
+        // textoElement.innerHTML = "Pertenece al sector B, teniendo " + contadorB + " en B y " + contadorA + " en A";
     }
 
     return respuestaSector;
